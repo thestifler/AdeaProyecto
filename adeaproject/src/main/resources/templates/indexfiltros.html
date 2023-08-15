@@ -1,0 +1,62 @@
+<!DOCTYPE html >
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Gestion de Usuarios</h1>
+    <a   th:href="@{/usuario}">[[#{usuario.mensaje.agregar}]]</a>
+
+    <form th:action="@{/usuario/filtro}" method="post" th:object="${usuarioFiltro}">
+
+        <label for="nombre">[[#{usuario.mensaje.nombre}]]: </label>
+        <input type="text" th:field="*{nombre}" id="nombre" name="nombre" />
+        <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+        <br>
+
+        <label for="fechafinal">[[#{usuario.mensaje.fechaInicial}]]: </label>
+        <input type="date" th:field="*{fechaAlta}" id="fechaAlta" name="fechaAlta"  th:value="${#dates.format(fechaAlta, 'yyyy-MM-dd')}"/>
+        <span th:if="${#fields.hasErrors('fechaAlta')}" th:errors="*{fechaAlta}"></span>
+        <br>
+
+        <label for="fechainicial">[[#{usuario.mensaje.fechaFinal}]]: </label>
+        <input type="date" th:field="*{fechaBaja}" id="fechaBaja" name="fechaBaja"  th:value="${#dates.format(fechaBaja, 'yyyy-MM-dd')}"/>
+        <span th:if="${#fields.hasErrors('fechaBaja')}" th:errors="*{fechaBaja}"></span>
+        <br>
+
+       
+
+        <input type="hidden" th:field="*{status}" id="status" name="status" />
+        <button type="submit" th:onclick="'document.getElementById(\'status\').value = \'A\';'">Activo</button>
+        <button type="submit" th:onclick="'document.getElementById(\'status\').value = \'B\';'">INACTIVOS</button>
+        <button type="submit" th:onclick="'document.getElementById(\'status\').value = \'R\';'">REVOCADOS</button>
+
+    </form>
+    <div th:if="${usuarios  != null and !usuarios.empty}">
+        <table>
+            <tr>
+                <th>[[#{usuario.mensaje.nombre}]]</th>
+                <th>[[#{usuario.mensaje.login}]]</th>
+                <th>[[#{usuario.mensaje.fechaAlta}]]</th>
+                <th>[[#{usuario.mensaje.status}]]</th>
+                <th >[[#{accion.mensaje.eliminar}]]</th>
+                <th >[[#{accion.mensaje.editar}]]</th>
+            </tr>
+    
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.nombre}"></td>
+                <td th:text="${usuario.login}"></td>
+                <td th:text="${usuario.fechaAlta}"></td>
+                <td th:text="${usuario.status}"></td>
+                
+                <td ><a th:href="@{/usuario/delete/{id}(id=${usuario.login})}">[[#{accion.mensaje.eliminar}]]</a></td>
+                <td ><a th:href="@{/usuario/edit/{id}(id=${usuario.login})}">[[#{accion.mensaje.editar}]]</a></td>
+            </tr>
+    
+    
+        </table>
+    </div>
+</body>
+</html>

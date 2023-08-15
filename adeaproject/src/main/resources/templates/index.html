@@ -1,0 +1,104 @@
+<!DOCTYPE html >
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand"th:href="@{/}">[[#{navbar.mensaje.gestion.usuario}]]</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page"    th:href="@{/usuario}">[[#{navbar.mensaje.agregar.usuario}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">[[#{navbar.mensaje.tablero.usuario}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">[[#{navbar.mensaje.cerrarsesion}]]</a>
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+    <form th:action="@{/usuario/filtro}" method="post" th:object="${usuarioFiltro}" class="row g-3 container text-center">
+
+            
+            <button type="submit" th:onclick="'document.getElementById(\'status\').value = \'A\';'" class="btn btn-success col-md-4">A</button>
+            <button type="submit" th:onclick="'document.getElementById(\'status\').value = \'B\';'" class="btn btn-secondary col-md-4">B</button>
+            <button type="submit" th:onclick="'document.getElementById(\'status\').value = \'R\';'" class="btn btn-danger col-md-4">R</button>
+           
+        </div>
+
+        <div class="col-md-6">
+            <label for="nombre" class="form-label">[[#{usuario.mensaje.nombre}]]: </label>
+            <input type="text" th:field="*{nombre}" id="nombre" name="nombre" class="form-control" />
+            <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+        </div>
+        <div class="col-md-6">
+            <label for="fechafinal" class="form-label">[[#{usuario.mensaje.fechaInicial}]]: </label>
+            <input type="date" th:field="*{fechaAlta}" id="fechaAlta" name="fechaAlta"  th:value="${#dates.format(fechaAlta, 'yyyy-MM-dd')}" class="form-control"/>
+            <span th:if="${#fields.hasErrors('fechaAlta')}" th:errors="*{fechaAlta}"></span>
+        </div>
+        <div class="col-md-6">
+
+        </div>
+        <div class="col-md-6">
+            <label for="fechainicial" class="form-label">[[#{usuario.mensaje.fechaFinal}]]: </label>
+            <input type="date" th:field="*{fechaBaja}" id="fechaBaja" name="fechaBaja"  th:value="${#dates.format(fechaBaja, 'yyyy-MM-dd')}"  class="form-control"/>
+            <span th:if="${#fields.hasErrors('fechaBaja')}" th:errors="*{fechaBaja}"></span>
+        </div>
+       
+
+        <input type="hidden" th:field="*{status}" id="status" name="status" />
+    
+        <div class="col-md-4">
+            <a   th:href="@{/}"  class="btn btn-success">[[#{usuario.mensaje.eliminar.filtros}]]</a>
+        </div>
+        
+
+
+        
+
+
+    </form>
+    <div th:if="${usuarios  != null and !usuarios.empty}">
+        <table class="table">
+            <tr>
+                <th scope="col">[[#{usuario.mensaje.nombre}]]</th>
+                <th scope="col">[[#{usuario.mensaje.login}]]</th>
+                <th scope="col">[[#{usuario.mensaje.fechaAlta}]]</th>
+                <th scope="col">[[#{usuario.mensaje.status}]]</th>
+                <th scope="col">[[#{accion.mensaje.eliminar}]]</th>
+                <th scope="col">[[#{accion.mensaje.editar}]]</th>
+            </tr>
+    
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.nombre}"scope="row"></td>
+                <td th:text="${usuario.login}"></td>
+                <td th:text="${usuario.fechaAlta}"></td>
+                <td th:text="${usuario.status}"></td>
+                
+                <td ><a th:href="@{/usuario/delete/{id}(id=${usuario.login})}"  class="btn btn-danger"   >[[#{accion.mensaje.eliminar}]]</a></td>
+                <td ><a th:href="@{/usuario/edit/{id}(id=${usuario.login})}" class="btn btn-primary">[[#{accion.mensaje.editar}]]</a></td>
+            </tr>
+    
+    
+        </table>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+</html>
